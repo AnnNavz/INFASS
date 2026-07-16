@@ -26,7 +26,7 @@
                     }
 
                     <!-- Registration Form -->
-                    <form method="post" asp-action="Register" asp-controller="Login">
+                    <form id="registerForm" method="post" asp-action="Register" asp-controller="Login">
 
                         <!-- Full Name Input -->
                         <div class="form-floating mb-3">
@@ -70,3 +70,31 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#registerForm').on('submit', function (e) {
+                // Prevent the form from submitting and reloading the page
+                e.preventDefault();
+
+                // Grab values using jQuery
+                var fullName = $('#nameInput').val();
+                var username = $('#usernameInput').val();
+                var password = $('#passwordInput').val();
+                var confirmpassword = $('#confirmPasswordInput').val();
+
+                // Fire the simple native browser alert
+                alert(
+                    "Credentials Captured!\n\n" +
+                    "Name: " + fullName + "\n" +
+                    "Username: " + username + "\n" +
+                    "Password: " + password + "\n" +
+                    "Confirm Password: " + confirmpassword
+                );
+
+                // No submit call here! The page will not refresh.
+            });
+        });
+    </script>
+}
