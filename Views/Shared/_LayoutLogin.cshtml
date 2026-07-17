@@ -1,23 +1,20 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewBag.Title</title>
-    <!-- Bootstrap 5 CSS -->
+    <title>@ViewBag.Title - INFASS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Optional: Custom styles for background color/gradients -->
-    <style>
-        body {
-            background-color: #f8f9fa; /* Light, neutral background */
-        }
-    </style>
+    <link href="~/css/auth.css" rel="stylesheet" asp-append-version="true" />
 </head>
-<body>
-    <div class="container-fluid">
-        @RenderBody()
-    </div>
+<body class="auth-body">
+    <div class="auth-blob auth-blob-1"></div>
+    <div class="auth-blob auth-blob-2"></div>
+    <div class="auth-blob auth-blob-3"></div>
 
-    <!-- Bootstrap 5 JS Bundle -->
+    @RenderBody()
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

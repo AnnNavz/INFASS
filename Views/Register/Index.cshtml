@@ -5,69 +5,74 @@
     ViewBag.Title = "Register";
 }
 
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="row w-100 justify-content-center">
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card shadow border-0 rounded-3">
-                <div class="card-body p-4 p-sm-5">
+<link href="~/css/auth.css" rel="stylesheet" asp-append-version="true" />
 
-                    <!-- Header Area -->
-                    <div class="text-center mb-4">
-                        <h3 class="fw-bold text-dark mb-1">Create Account</h3>
-                        <p class="text-muted small">Sign up to get started</p>
-                    </div>
+<div class="auth-section">
+    <div class="auth-card">
 
-                    <!-- Error/Validation Alert (Optional, if you pass errors via ViewBag) -->
-                    @if (ViewBag.ErrorMessage != null)
-                    {
-                        <div class="alert alert-danger" role="alert">
-                            @ViewBag.ErrorMessage
-                        </div>
-                    }
+        <!-- Header Area -->
+        <div class="auth-header">
+            <span class="auth-emoji">✨</span>
+            <h3 class="auth-title">Create Account</h3>
+            <p class="auth-subtitle">Sign up to get started</p>
+        </div>
 
-                    <!-- Registration Form -->
-                    <form method="post" asp-action="Register" asp-controller="Login">
+        <!-- Error/Validation Alert (Optional, if you pass errors via ViewBag) -->
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
 
-                        <!-- Full Name Input -->
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="nameInput" name="FullName" placeholder="Full Name" required autocomplete="name" />
-                            <label for="nameInput">Full Name</label>
-                        </div>
+        <!-- Registration Form -->
+        <form method="post" asp-action="Register" asp-controller="Login">
 
-                        <!-- Username -->
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="usernameInput" name="Username" placeholder="Username" required autocomplete="username" />
-                            <label for="usernameInput">Username</label>
-                        </div>
-
-                        <!-- Password Input -->
-                        <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="passwordInput" name="Password" placeholder="Password" required autocomplete="new-password" />
-                            <label for="passwordInput">Password</label>
-                        </div>
-
-                        <!-- Confirm Password Input -->
-                        <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="confirmPasswordInput" name="ConfirmPassword" placeholder="Confirm Password" required autocomplete="new-password" />
-                            <label for="confirmPasswordInput">Confirm Password</label>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button id="register" class="btn btn-primary w-100 py-2.5 mb-3 fw-semibold" type="submit">
-                            Sign Up
-                        </button>
-
-                        <!-- Login Prompt -->
-                        <div class="text-center mt-3">
-                            <span class="text-muted small">Already have an account? </span>
-                            <a asp-action="Index" asp-controller="Login" class="text-decoration-none small fw-semibold text-primary">Sign In</a>
-                        </div>
-
-                    </form>
-
+            <!-- Full Name Input -->
+            <div class="auth-field">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="nameInput" name="FullName" placeholder="Full Name" required autocomplete="name" />
+                    <label for="nameInput">Full Name</label>
                 </div>
             </div>
-        </div>
+
+            <!-- Username -->
+            <div class="auth-field">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="usernameInput" name="Username" placeholder="Username" required autocomplete="username" />
+                    <label for="usernameInput">Username</label>
+                </div>
+            </div>
+
+            <!-- Password Input -->
+            <div class="auth-field">
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="passwordInput" name="Password" placeholder="Password" required autocomplete="new-password" />
+                    <label for="passwordInput">Password</label>
+                </div>
+            </div>
+
+            <!-- Confirm Password Input -->
+            <div class="auth-field">
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="confirmPasswordInput" name="ConfirmPassword" placeholder="Confirm Password" required autocomplete="new-password" />
+                    <label for="confirmPasswordInput">Confirm Password</label>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button id="register" class="btn btn-primary auth-btn" type="submit">
+                Sign Up
+            </button>
+
+            <!-- Login Prompt -->
+            <div class="auth-footer">
+                <span>Already have an account? </span>
+                <a asp-action="Index" asp-controller="Login" class="auth-link">Sign In</a>
+            </div>
+
+        </form>
+
     </div>
 </div>
 
