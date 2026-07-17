@@ -26,7 +26,7 @@
                     }
 
                     <!-- Registration Form -->
-                    <form id="registerForm" method="post" asp-action="Register" asp-controller="Login">
+                    <form method="post" asp-action="Register" asp-controller="Login">
 
                         <!-- Full Name Input -->
                         <div class="form-floating mb-3">
@@ -34,10 +34,10 @@
                             <label for="nameInput">Full Name</label>
                         </div>
 
-                        <!-- Username / Email Input -->
+                        <!-- Username -->
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="usernameInput" name="Username" placeholder="Username" required autocomplete="username" />
-                            <label for="usernameInput">Username or Email</label>
+                            <label for="usernameInput">Username</label>
                         </div>
 
                         <!-- Password Input -->
@@ -53,7 +53,7 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button class="btn btn-primary w-100 py-2.5 mb-3 fw-semibold" type="submit">
+                        <button id="register" class="btn btn-primary w-100 py-2.5 mb-3 fw-semibold" type="submit">
                             Sign Up
                         </button>
 
@@ -72,28 +72,35 @@
 </div>
 
 @section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <script>
         $(document).ready(function () {
-            $('#registerForm').on('submit', function (e) {
-                // Prevent the form from submitting and reloading the page
+
+            $('#register').click(function (e) { 
                 e.preventDefault();
 
-                // Grab values using jQuery
-                var fullName = $('#nameInput').val();
-                var username = $('#usernameInput').val();
-                var password = $('#passwordInput').val();
-                var confirmpassword = $('#confirmPasswordInput').val();
+                var formData = {
+                    FullName: $('#nameInput').val(),
+                    Username: $('#usernameInput').val(),
+                    Password: $('#passwordInput').val(),
+                    ConfirmPassword: $('#confirmPasswordInput').val()
+                };
 
-                // Fire the simple native browser alert
-                alert(
-                    "Credentials Captured!\n\n" +
-                    "Name: " + fullName + "\n" +
-                    "Username: " + username + "\n" +
-                    "Password: " + password + "\n" +
-                    "Confirm Password: " + confirmpassword
-                );
-
-                // No submit call here! The page will not refresh.
+                $.ajax({
+                    url: '/Register/SubmitRegistration', 
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData), 
+                    success: function (response) {
+                        
+                        alert(response);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("An error occurred: " + xhr.responseText);
+                    }
+                });
             });
         });
     </script>
