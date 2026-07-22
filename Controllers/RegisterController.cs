@@ -1,15 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using INFASS.Models;
+using INFASS.Services;
 
 namespace INFASS.Controllers
 {
-    public class RegisterController : Controller
-    {
-        User user = new User();
-        public IActionResult Index()
-        {
-            return View();
-        }
+	public class RegisterController : Controller
+	{
+		private readonly IModelOutputLogger _modelOutputLogger;
+
+		public RegisterController(IModelOutputLogger modelOutputLogger)
+		{
+			_modelOutputLogger = modelOutputLogger;
+		}
+
+		public IActionResult Index()
+		{
+			return View();
+		}
 
 		[HttpPost]
 		public IActionResult SubmitRegistration([FromBody] User userData)
@@ -19,18 +26,10 @@ namespace INFASS.Controllers
 				return BadRequest("No data received.");
 			}
 
-			System.Diagnostics.Debug.WriteLine("================ USER SIGN UP DATA ================");
-			System.Diagnostics.Debug.WriteLine($"Fullname:  {userData.FullName}");
-			System.Diagnostics.Debug.WriteLine($"Username:  {userData.Username}");
-			System.Diagnostics.Debug.WriteLine($"Password:  {userData.Password}");
-			System.Diagnostics.Debug.WriteLine("===================================================");
+			_modelOutputLogger.WriteToOutput(userData, "USER SIGN UP DATA");
 
-			string message = $"Successfully received registration for: \n" +
-				$"\n" +
-				$"Fullname: {userData.FullName} \n" +
-				$"Username: {userData.Username} \n" +
-				$"Password: {userData.Password} \n" +
-				$"Confirm Password: {userData.ConfirmPassword}";
+			string message = "Successfully received registration for:\n\n" +
+				_modelOutputLogger.FormatModel(userData, "Registration Result");
 
 			return Json(message);
 		}

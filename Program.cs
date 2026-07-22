@@ -2,6 +2,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<INFASS.Services.IModelOutputLogger, INFASS.Services.ModelOutputLogger>();
 
 var app = builder.Build();
 

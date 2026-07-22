@@ -1,33 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using INFASS.Models;
+using INFASS.Services;
 
 namespace INFASS.Controllers
 {
-    public class LoginController : Controller
-    {
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
+	public class LoginController : Controller
+	{
+		private readonly IModelOutputLogger _modelOutputLogger;
 
+		public LoginController(IModelOutputLogger modelOutputLogger)
+		{
+			_modelOutputLogger = modelOutputLogger;
+		}
 
+		[HttpGet]
+		public IActionResult Index()
+		{
+			return View();
+		}
 
-        [HttpPost]
-        public IActionResult Login(string username, string password)
-        {
-            // Define your static credentials here
-            const string StaticUsername = "admin";
-            const string StaticPassword = "password123";
+		[HttpPost]
+		public IActionResult Login(Login loginData)
+		{
+			const string StaticUsername = "admin";
+			const string StaticPassword = "password123";
 
-            if (username == StaticUsername && password == StaticPassword)
-            {
-                // Redirects to the Index action of HomeController
-                return RedirectToAction("Index", "Home");
-            }
+			_modelOutputLogger.WriteToOutput(loginData, "LOGIN ATTEMPT DATA");
 
-            // If authentication fails, display an error message
-            ViewBag.ErrorMessage = "Invalid username or password.";
-            return View();
-        }
-    }
+			if (loginData.Username == StaticUsername && loginData.Password == StaticPassword)
+			{
+				return RedirectToAction("Index", "Home");
+			}
+
+			ViewBag.ErrorMessage = "Invalid username or password.";
+			return View();
+		}
+	}
 }
