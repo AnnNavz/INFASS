@@ -6,12 +6,7 @@ namespace INFASS.Controllers
 {
 	public class LoginController : Controller
 	{
-		private readonly IModelOutputLogger _modelOutputLogger;
-
-		public LoginController(IModelOutputLogger modelOutputLogger)
-		{
-			_modelOutputLogger = modelOutputLogger;
-		}
+		
 
 		[HttpGet]
 		public IActionResult Index()
@@ -25,7 +20,6 @@ namespace INFASS.Controllers
 			const string StaticUsername = "admin";
 			const string StaticPassword = "password123";
 
-			_modelOutputLogger.WriteToOutput(loginData, "LOGIN ATTEMPT DATA");
 
 			if (loginData.Username == StaticUsername && loginData.Password == StaticPassword)
 			{
