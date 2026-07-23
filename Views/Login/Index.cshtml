@@ -54,7 +54,7 @@
             </div>
 
             <!-- Submit Button -->
-            <button class="btn btn-primary auth-btn" type="submit">
+            <button id="loginBtn" class="btn btn-primary auth-btn" type="submit">
                 Sign In
             </button>
 
@@ -68,3 +68,43 @@
 
     </div>
 </div>
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#loginBtn').click(function (e) {
+                e.preventDefault();
+
+                var now = new Date();
+
+                var currentDate = now.toISOString().split('T')[0];
+
+                var currentTime = now.toTimeString().split(' ')[0];
+
+                var formData = {
+                    Username: $('#usernameInput').val(),
+                    Password: $('#passwordInput').val(),
+                    DateIn: currentDate,
+                    TimeIn: currentTime
+                };
+
+                $.ajax({
+                    url: '/Login/Login',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function (response) {
+                        alert(response);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("An error occurred: " + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}

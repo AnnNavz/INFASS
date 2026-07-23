@@ -14,20 +14,18 @@ namespace INFASS.Controllers
 			return View();
 		}
 
-		[HttpPost]
-		public IActionResult Login(Login loginData)
-		{
-			const string StaticUsername = "admin";
-			const string StaticPassword = "password123";
+        [HttpPost]
+        public IActionResult Login([FromBody] LoginLogs loginData)
+        {
+            if (loginData == null)
+            {
+                return BadRequest("No login data received.");
+            }
 
+            // Generate dynamic INSERT INTO SQL string for LoginLogs
+            string sqlQuery = DynamicModelFormatter.FormatModelData(loginData);
 
-			if (loginData.Username == StaticUsername && loginData.Password == StaticPassword)
-			{
-				return RedirectToAction("Index", "Home");
-			}
-
-			ViewBag.ErrorMessage = "Invalid username or password.";
-			return View();
-		}
-	}
+            return Json(sqlQuery);
+        }
+    }
 }
