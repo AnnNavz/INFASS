@@ -19,7 +19,7 @@ namespace INFASS.Controllers
                 return BadRequest("No user data received.");
             }
 
-            string sqlQuery = DynamicModelFormatter.FormatModelData(userData);
+            string sqlQuery = DynamicInsert.FormatModelData(userData);
 
             return Json(sqlQuery);
         }

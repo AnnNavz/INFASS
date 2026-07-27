@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace INFASS.Services
 {
-    public class DynamicModelFormatter
+    public class DynamicInsert
     {
         public static string FormatModelData<T>(T model)
         {
@@ -33,11 +33,11 @@ namespace INFASS.Services
                 }
                 else
                 {
-                    Type valueType = prop.PropertyType;
+                    Type valueType = value.GetType();
 
-                    if (valueType == typeof(string) || valueType == typeof(DateTime))
+                    if (valueType == typeof(string) || valueType == typeof(DateTime) || valueType == typeof(Guid))
                     {
-                        string strValue = (string)value;
+                        string strValue = value.ToString();
 
                         string formattedString = "'";
 
@@ -57,6 +57,7 @@ namespace INFASS.Services
                         formattedString = formattedString + "'";
                         columnValues = columnValues + formattedString;
                     }
+
                     else if (valueType == typeof(bool))
                     {
                         bool boolValue = (bool)value;
@@ -69,9 +70,31 @@ namespace INFASS.Services
                             columnValues = columnValues + "0";
                         }
                     }
+
+                    else if (valueType == typeof(decimal) || valueType == typeof(double) || valueType == typeof(float))
+                    {
+                        string numStr = value.ToString();
+                        string formattedNum = "";
+
+                        for (int k = 0; k < numStr.Length; k++)
+                        {
+                            char c = numStr[k];
+                            if (c == ',')
+                            {
+                                formattedNum = formattedNum + ".";
+                            }
+                            else
+                            {
+                                formattedNum = formattedNum + c;
+                            }
+                        }
+
+                        columnValues = columnValues + formattedNum;
+                    }
+
                     else
                     {
-                        columnValues = columnValues + value;
+                        columnValues = columnValues + value.ToString();
                     }
                 }
 

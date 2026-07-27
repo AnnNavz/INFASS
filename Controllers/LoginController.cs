@@ -22,8 +22,8 @@ namespace INFASS.Controllers
                 return BadRequest("No login data received.");
             }
 
-            // Generate dynamic INSERT INTO SQL string for LoginLogs
-            string sqlQuery = DynamicModelFormatter.FormatModelData(loginData);
+
+            string sqlQuery = DynamicInsert.FormatModelData(loginData);
 
             return Json(sqlQuery);
         }
