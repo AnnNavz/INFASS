@@ -52,18 +52,97 @@
                 </div>
             </div>
 
-            <!-- Submit Button -->
-            <button id="saveProduct" class="btn btn-primary auth-btn" type="submit">
+            <!-- Save Product Button -->
+            <button id="saveProduct" class="btn btn-primary auth-btn w-100 mb-2" type="button">
                 Save Product
             </button>
 
+            <!-- Update Product Button -->
+            <button type="button" class="btn btn-warning auth-btn w-100 mb-2" data-bs-toggle="modal" data-bs-target="#updateModal">
+                Update Product
+            </button>
+
+            <!-- Delete Product Button -->
+            <button type="button" class="btn btn-danger auth-btn w-100 mb-2" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                Delete Product
+            </button>
+
+            <!-- View Products Button -->
+            <button type="button" id="viewProducts" class="btn btn-info auth-btn w-100">
+                View Products
+            </button>
+
             <!-- Footer Link -->
-            <div class="auth-footer">
+            <div class="auth-footer mt-3">
                 <a asp-action="Index" asp-controller="Product" class="auth-link">Back to Products</a>
             </div>
 
         </form>
 
+    </div>
+</div>
+
+<!-- Update Modal Popup -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">Update Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="updateIdInput" placeholder="Product ID" required />
+                    <label for="updateIdInput">Product ID</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="updateNameInput" placeholder="Product Name" required />
+                    <label for="updateNameInput">Product Name</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <textarea class="form-control" id="updateDescriptionInput" placeholder="Description" style="height: 100px;"></textarea>
+                    <label for="updateDescriptionInput">Product Description</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="number" step="0.01" min="0" class="form-control" id="updatePriceInput" placeholder="Price" required />
+                    <label for="updatePriceInput">Price</label>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="submitUpdateProduct" class="btn btn-warning">Submit Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal Popup -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted">Enter the ID of the product you wish to delete:</p>
+
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="deleteIdInput" placeholder="Product ID" required />
+                    <label for="deleteIdInput">Product ID</label>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="submitDeleteProduct" class="btn btn-danger">Confirm Delete</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -73,6 +152,18 @@
     <script>
         $(document).ready(function () {
 
+            // Helper function to force remove stuck modal backdrops
+            function cleanupModalBackdrop() {
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css('overflow', '');
+            }
+
+            // Prevent default form submission on enter
+            $('form').on('submit', function (e) {
+                e.preventDefault();
+            });
+
+            // Save Product AJAX
             $('#saveProduct').click(function (e) {
                 e.preventDefault();
 
@@ -95,6 +186,77 @@
                     }
                 });
             });
+
+            // Update Product AJAX
+            $('#submitUpdateProduct').click(function (e) {
+                e.preventDefault();
+
+                var updateData = {
+                    Id: parseInt($('#updateIdInput').val()) || 0,
+                    ProductName: $('#updateNameInput').val(),
+                    ProductDescription: $('#updateDescriptionInput').val(),
+                    Price: parseFloat($('#priceInput').val()) || 0
+                };
+
+                $.ajax({
+                    url: '/Product/UpdateProduct',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updateData),
+                    success: function (response) {
+                        $('#updateModal').modal('hide');
+                        cleanupModalBackdrop(); // Removes the stuck dark overlay
+                        alert(response);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("An error occurred: " + xhr.responseText);
+                    }
+                });
+            });
+
+            // Delete Product AJAX
+            $('#submitDeleteProduct').click(function (e) {
+                e.preventDefault();
+
+                var deleteData = {
+                    Id: parseInt($('#deleteIdInput').val()) || 0
+                };
+
+                $.ajax({
+                    url: '/Product/DeleteProduct',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(deleteData),
+                    success: function (response) {
+                        $('#deleteModal').modal('hide');
+                        $('#deleteIdInput').val('');
+                        cleanupModalBackdrop(); // Removes the stuck dark overlay
+                        alert(response);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("An error occurred: " + xhr.responseText);
+                    }
+                });
+            });
+
+            // View Products AJAX
+            $('#viewProducts').click(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '/Product/ViewProducts',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({}),
+                    success: function (response) {
+                        alert(response);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("An error occurred: " + xhr.responseText);
+                    }
+                });
+            });
+
         });
     </script>
 }
