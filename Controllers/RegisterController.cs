@@ -23,5 +23,7 @@ namespace INFASS.Controllers
 
             return Json(sqlQuery);
         }
+
+        
     }
 }
